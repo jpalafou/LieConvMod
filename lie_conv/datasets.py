@@ -406,7 +406,7 @@ class SpringDynamics(DynamicsDataset):
 
 @export
 class NBodyDynamics(DynamicsDataset):
-    default_root_dir = os.path.expanduser('~/datasets/ODEDynamics/NBodyDynamics/')
+    default_root_dir = os.path.expanduser('datasets/ODEDynamics/NBodyDynamics/')
 
     def __init__(self, root_dir=default_root_dir, train=True, download=True, n_systems=100, regen=False,
                  chunk_len=5, space_dim=3, delta_t=0.01):
