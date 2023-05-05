@@ -362,7 +362,7 @@ class DynamicsDataset(Dataset):
     
 @export
 class SpringDynamics(DynamicsDataset):
-    default_root_dir = os.path.expanduser('~/datasets/ODEDynamics/SpringDynamics/')
+    default_root_dir = os.path.expanduser('datasets/ODEDynamics/SpringDynamics/')
     sys_dim = 2
     
     def __init__(self, root_dir=default_root_dir, train=True, download=True, n_systems=100, space_dim=2, regen=False,
