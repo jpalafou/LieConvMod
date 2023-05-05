@@ -286,7 +286,6 @@ class DynamicsDataset(Dataset):
             z_batches.append(new_zs)
             sysp_batches.append(torch.stack(sys_params, dim=-1))
             n_gen += new_ts.shape[0]
-        print(n_gen)
         ts = torch.cat(t_batches, dim=0)[:n_systems]
         zs = torch.cat(z_batches, dim=0)[:n_systems]
         sys_params = torch.cat(sysp_batches, dim=0)[:n_systems]

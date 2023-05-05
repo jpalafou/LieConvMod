@@ -8,7 +8,7 @@ from torch.optim import Adam
 from oil.utils.utils import LoaderTo, islice, FixedNumpySeed, cosLr
 from lie_conv.datasets import SpringDynamics
 from lie_conv import datasets
-from lie_conv.dynamicsTrainer import IntegratedDynamicsTrainer, FC, HLieResNet
+from lie_conv.dynamicsTrainer import IntegratedDynamicsTrainer, FC
 
 import lie_conv.lieGroups as lieGroups
 from lie_conv.lieGroups import Tx
@@ -22,7 +22,7 @@ except ImportError:
                 `pip install .[GN]` for this functionality', ImportWarning)
 
 def makeTrainer(*,network=FC,net_cfg={},lr=1e-2,n_train=3000,regen=False,dataset=SpringDynamics,
-                dtype=torch.float32,device=torch.device('cuda'),bs=200,num_epochs=2,
+                dtype=torch.float32,device=torch.device('cpu'),bs=200,num_epochs=2,
                 trainer_config={}):
     # Create Training set and model
     splits = {'train':n_train,'val':200,'test':2000}
@@ -39,10 +39,3 @@ def makeTrainer(*,network=FC,net_cfg={},lr=1e-2,n_train=3000,regen=False,dataset
     lr_sched = cosLr(num_epochs)
     return IntegratedDynamicsTrainer(model,dataloaders,opt_constr,lr_sched,
                                     log_args={'timeFrac':1/4,'minPeriod':0.0},**trainer_config)
-
-Trial = train_trial(makeTrainer)
-if __name__=='__main__':
-    defaults = copy.deepcopy(makeTrainer.__kwdefaults__)
-    defaults['save']=False
-    defaults['trainer_config']['early_stop_metric']='val_MSE'
-    print(Trial(argupdated_config(defaults,namespace=(dynamicsTrainer,lieGroups,datasets,graphnets))))

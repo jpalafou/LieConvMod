@@ -4,3 +4,6 @@
 *.tfevents*
 *.df
 *.s
+
+.DS_Store
+lie_conv.egg-info/
