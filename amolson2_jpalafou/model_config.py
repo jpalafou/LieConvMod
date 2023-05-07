@@ -1,4 +1,4 @@
-num_epochs = 20
+num_layers = 2
 k = 150
-num_layers = 1
-n_train = 600
+num_epochs = 50
+n_train = 1000

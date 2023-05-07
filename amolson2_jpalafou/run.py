@@ -1,31 +1,49 @@
 import numpy as np
 import torch
+from torchdiffeq import odeint
 import matplotlib.pyplot as plt
-from lie_conv.dynamicsTrainer import HLieResNet
-from amolson2_jpalafou.model_config import k, num_layers
 
-# import spring dynamcis data
-t, z, sysp = torch.load('datasets/ODEDynamics/SpringDynamics/spring_2D_10000_train.pz')
+# Finzi imports
+from lie_conv.dynamicsTrainer import Partial, HLieResNet
+from lie_conv.lieGroups import Trivial, T, SO2
+
+# amolson jpalafou imports
+from model_config import num_layers, k
+from dynamics import evaluate_2d_momentum
+
+# import spring dynamics data
+t, z, sysp = torch.load(
+    'datasets/ODEDynamics/SpringDynamics/spring_2D_10000_train.pz'
+    )
 t, z, sysp = t.to(torch.float32), z.to(torch.float32), sysp.to(torch.float32)
+print('Imported simulation data')
 
 # load trained model
-model = HLieResNet(k = k, num_layers = num_layers)
-model.load_state_dict(torch.load('models/springmodel.pt')['model_state'])
+SO2model = HLieResNet(k = k, num_layers = num_layers, group=SO2())
+Tmodel = HLieResNet(k = k, num_layers = num_layers, group=T(2))
+SO2model.load_state_dict(
+    torch.load(f"models/springmodel_SO2.pt"
+    )['model_state'])
+Tmodel.load_state_dict(
+    torch.load(f"models/springmodel_T.pt"
+    )['model_state'])
+print('Loaded models')
 
-# evaluate model at all subsequent timesteps
-batch_idx = 1
-model_evals = []
-for k in range(499):
-    output = model(torch.Tensor([]), z[0:5, k, :], sysp[0:5]).detach().numpy()
-    model_evals.append(output)
-model_evals = np.asarray(model_evals)
+# run simulation using model dynamics
+dataidx = 0
+bs = 10 # evaulation batch size
+T = 100 # number of simulation timesteps
 
-# plot dynamics data against model prediction
-midx = 2 # up to 5
-plt.plot(t[batch_idx], z[batch_idx, :, midx + 12], label='x dot, m1')
-plt.plot(t[batch_idx, 1:], model_evals[:, batch_idx, midx + 0], '--', label='model x dot, m1')
-plt.plot(t[batch_idx], z[batch_idx, :, midx + 18], label='y dot, m1')
-plt.plot(t[batch_idx, 1:], model_evals[:, batch_idx, midx + 6], '--', label='model y dot, m1')
-plt.grid()
+# put model integrator here
+
+# plot simulation momentums to verify that they remain constant
+px, py, pang = evaluate_2d_momentum(z)
+_, _, pang_pred_SO2 = evaluate_2d_momentum(zs_SO2)
+_, _, pang_pred_T = evaluate_2d_momentum(zs_T)
+plt.plot(t[dataidx, 0:T], pang[dataidx, 0:T], label='dataset angular momentum')
+plt.plot(t[dataidx, 0:T], pang_pred_SO2[dataidx].detach().numpy(), '--', label='SO2 predicted angular momentum')
+plt.plot(t[dataidx, 0:T], pang_pred_T[dataidx].detach().numpy(), '--', label='T2 predicted angular momentum')
+plt.xlabel('t')
+plt.title('Spring mass conservation of momentum')
 plt.legend()
 plt.show()
