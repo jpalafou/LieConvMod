@@ -32,11 +32,12 @@ print('Loaded models')
 
 # run simulation using model dynamics
 dataidx = 0
+bs = 10
+T = 100
 
-# put model integrator here
 z0 = z[:, 0, :]
-zs_SO2 = model_integrator(SO2model, t, z0, sysp, batch_size=10, T=100)
-zs_T = model_integrator(Tmodel, t, z0, sysp, batch_size=10, T=100)
+zs_SO2 = model_integrator(SO2model, t, z0, sysp, batch_size=bs, T=T)
+zs_T = model_integrator(Tmodel, t, z0, sysp, batch_size=bs, T=T)
 
 # plot simulation momentums to verify that they remain constant
 px, py, pang = evaluate_2d_momentum(z)
