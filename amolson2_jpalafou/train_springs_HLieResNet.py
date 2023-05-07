@@ -2,7 +2,7 @@ import torch
 from lie_conv.dynamicsTrainer import HLieResNet
 from lie_conv.lieGroups import Trivial, T, SO2
 from spring_trainer import makeTrainer
-from model_config import num_layers, k, group, num_epochs, n_train
+from model_config import num_layers, k, num_epochs, n_train
 
 group = T(2)
 
