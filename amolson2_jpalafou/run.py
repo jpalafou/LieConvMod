@@ -10,6 +10,7 @@ from lie_conv.lieGroups import Trivial, T, SO2
 # amolson jpalafou imports
 from model_config import num_layers, k
 from dynamics import evaluate_2d_momentum
+from model_integrator import model_integrator
 
 # import spring dynamics data
 t, z, sysp = torch.load(
@@ -35,6 +36,9 @@ bs = 10 # evaulation batch size
 T = 100 # number of simulation timesteps
 
 # put model integrator here
+zs_SO2 = model_integrator(SO2model, sysp, bs, T)
+zs_T = model_integrator(Tmodel, sysp, bs, T)
+
 
 # plot simulation momentums to verify that they remain constant
 px, py, pang = evaluate_2d_momentum(z)
