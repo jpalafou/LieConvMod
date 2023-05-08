@@ -1,4 +1,5 @@
 num_layers = 2
 k = 150
-num_epochs = 50
+center = False
+num_epochs = 20
 n_train = 1000

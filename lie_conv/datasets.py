@@ -395,7 +395,7 @@ class SpringDynamics(DynamicsDataset):
         k = 5*torch.rand(n_systems, n).double()
         q0 = .4*torch.randn(n_systems, n, space_dim).double()
         p0 = .6*torch.randn(n_systems, n, space_dim).double()
-        p0 -= p0.mean(0,keepdim=True)
+        # p0 -= p0.mean(0,keepdim=True)
         z0 = torch.cat([q0.reshape(n_systems, n * space_dim), p0.reshape(n_systems, n * space_dim)], dim=1)
         return z0, (masses, k)
 
