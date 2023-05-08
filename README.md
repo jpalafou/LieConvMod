@@ -10,7 +10,11 @@ Python 3.9 is recommended. Install the original repository requirements with
         
 ***User guide***
 
-[amolson2_jpalafou.model_config](https://github.com/MAE-DLPS/final-project-final_amolson2_jpalafou/blob/main/amolson2_jpalafou/model_config.py) specifies a simple set of model and training parameters. Train HLieResNet models on spring coupled mass data with a specific LieConv group using
+[amolson2_jpalafou.model_config](https://github.com/MAE-DLPS/final-project-final_amolson2_jpalafou/blob/main/amolson2_jpalafou/model_config.py) specifies a simple set of model and training parameters. Train a simple fully connected model using
+        
+        python amolson2_jpalafou/train_springs_FC.py
+
+Train HLieResNet models on spring coupled mass data with a specific LieConv group using
 
         python amolson2_jpalafou/train_springs_HLieResNet.py --group 'Trivial'
         python amolson2_jpalafou/train_springs_HLieResNet.py --group 'T2'
@@ -22,4 +26,4 @@ Run
 
         python amolson2_jpalafou/run.py
 
-the visualize the trajectories and momentums predicted by the three models. Note the difference in results when **center** is set to True or False for the HLieResNet models.
+the visualize the trajectories and momentums predicted by the four models. Note the difference in results when **center** is set to True or False for the HLieResNet models.
