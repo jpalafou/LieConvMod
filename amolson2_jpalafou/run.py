@@ -20,7 +20,12 @@ t, z, sysp = t.to(torch.float32), z.to(torch.float32), sysp.to(torch.float32)
 print('Imported simulation data')
 
 # load trained model
-Trivialmodel = HLieResNet(k = k, num_layers = num_layers, center = center, group=Trivial(2))
+Trivialmodel = HLieResNet(
+    k = k, 
+    num_layers = num_layers, 
+    center = center, 
+    group=Trivial(2)
+    )
 Trivialmodel.load_state_dict(
     torch.load(f"models/springmodel_Trivial.pt"
     )['model_state'])
@@ -35,7 +40,7 @@ SO2model.load_state_dict(
 print('Loaded models')
 
 # run simulation using model dynamics
-dataidx = 0
+dataidx = 2
 bs = 10
 T = 100
 
@@ -51,6 +56,20 @@ px_pred_Trivial, py_pred_Trivial, pang_pred_Trivial = evaluate_2d_momentum(zs_Tr
 px_pred_T, py_pred_T, pang_pred_T = evaluate_2d_momentum(zs_T)
 px_pred_SO2, py_pred_SO2, pang_pred_SO2 = evaluate_2d_momentum(zs_SO2)
 
+
+# plot the trajectories predicted by the models
+plt.plot(z[dataidx, 0:T, 0], z[dataidx, 0:T, 12], label=r'$m_1$, dataset')
+plt.plot(zs_Trivial[dataidx, 0:T, 0].detach().numpy(), zs_Trivial[dataidx, 0:T, 12].detach().numpy(), '--', label=r'$m_1$, Trivial predicted')
+plt.plot(zs_T[dataidx, 0:T, 0].detach().numpy(), zs_T[dataidx, 0:T, 12].detach().numpy(), '--', label=r'$m_1$, T2 predicted')
+plt.plot(zs_SO2[dataidx, 0:T, 0].detach().numpy(), zs_SO2[dataidx, 0:T, 12].detach().numpy(), '--', label=r'$m_1$, SO2 predicted')
+plt.xlabel(r'$x$')
+plt.ylabel(r'$\dot{x}$')
+plt.legend()
+plt.savefig('figures/trajectories.png', dpi=300)
+plt.close()
+
+
+# plot the momentums predicted by the models
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 8))
 
 # linear momentum
@@ -71,4 +90,5 @@ ax2.plot(t[dataidx, 0:T], pang_pred_SO2[dataidx].detach().numpy(), '--', label=r
 ax2.set_xlabel('t')
 ax2.legend()
 
-plt.savefig('figure.png', dpi=300)
+plt.savefig('figures/momentum.png', dpi=300)
+plt.close()
